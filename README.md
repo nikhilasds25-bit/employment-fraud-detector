@@ -1,5 +1,3 @@
-# employment-fraud-detector
-
 # 🛡️ Employment Fraud Detector
 
 ## Live Demo
