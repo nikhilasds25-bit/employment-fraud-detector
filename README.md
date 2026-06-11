@@ -8,7 +8,7 @@ https://employment-fraud-detector-danbudd3v8zz94vx8xkdv9.streamlit.app/
 
 ---
 
-## Project Overview
+# Project Overview
 
 Employment fraud and fake job advertisements have become increasingly common across online job portals. Fraudulent postings often deceive job seekers by promising unrealistic salaries, requiring upfront payments, or offering guaranteed employment without proper recruitment procedures.
 
@@ -17,76 +17,222 @@ The Employment Fraud Detector is a Machine Learning-based web application that a
 * ✅ Genuine Job Posting
 * 🚨 Fraudulent Job Posting
 
-The application is built using Logistic Regression and TF-IDF text vectorization and is deployed using Streamlit Community Cloud.
+The system uses Natural Language Processing (NLP), TF-IDF feature extraction, and machine learning models to classify job advertisements.
 
 ---
 
-## Features
+# Features
 
-* Interactive web application using Streamlit
+* Interactive Streamlit web application
 * Real-time job posting analysis
-* Fraud detection using Machine Learning
-* Confidence score for each prediction
-* Simple and user-friendly interface
-* Fully deployed and accessible online
+* NLP-based fraud detection
+* Confidence score generation
+* Model comparison framework
+* Fully deployed online
+* Multiple trained models stored for experimentation
 
 ---
 
-## Dataset
+# Dataset
 
-This project uses the Fake Job Postings Dataset, which contains job advertisements labeled as either genuine or fraudulent.
+This project uses the Fake Job Postings Dataset containing both legitimate and fraudulent job advertisements.
 
-The dataset includes information such as:
+Dataset size:
 
-* Job title
-* Company profile
-* Job description
+* Total Records: 17,880
+* Genuine Jobs: 17,014
+* Fraudulent Jobs: 866
+
+The dataset contains:
+
+* Job Title
+* Company Profile
+* Description
 * Requirements
 * Benefits
-* Employment type
-* Industry information
+* Industry
+* Employment Type
+* Experience Level
+* Education Requirements
 
-For training, multiple textual fields were combined into a single feature to improve fraud detection performance.
+Multiple textual columns were combined into a single text feature to improve fraud detection performance.
 
 ---
 
-## Machine Learning Pipeline
+# Exploratory Data Analysis (EDA)
 
-### Data Preprocessing
+Key findings from the dataset:
+
+### Fraud Distribution
+
+* Genuine Jobs: 95.16%
+* Fraudulent Jobs: 4.84%
+
+### Company Logo Analysis
+
+Average company logo presence:
+
+* Genuine Jobs: 81.9%
+* Fraudulent Jobs: 32.7%
+
+### Screening Questions
+
+Average presence of screening questions:
+
+* Genuine Jobs: 50.2%
+* Fraudulent Jobs: 28.8%
+
+### Remote Jobs
+
+Average telecommuting rate:
+
+* Genuine Jobs: 4.1%
+* Fraudulent Jobs: 7.4%
+
+These insights were later used to design future feature engineering improvements.
+
+---
+
+# Machine Learning Pipeline
+
+## Data Preprocessing
 
 * Missing value handling
 * Text cleaning
 * Feature selection
-* Combined text generation
+* Combined text feature generation
 
-### Feature Extraction
+## Feature Extraction
 
-TF-IDF (Term Frequency–Inverse Document Frequency) was used to convert textual job postings into numerical vectors.
+TF-IDF (Term Frequency–Inverse Document Frequency)
 
-### Model Training
+Used to transform job postings into numerical feature vectors suitable for machine learning models.
 
-Algorithm used:
+---
+
+# Model Development
+
+## Version 1 — Logistic Regression
+
+### Model
 
 * Logistic Regression
 * Class Weight Balancing
 
-Model and vectorizer were saved using Joblib.
+### Performance
+
+| Metric         | Value |
+| -------------- | ----- |
+| Accuracy       | 97%   |
+| Fraud Recall   | 88%   |
+| Fraud F1 Score | 73%   |
+
+Confusion Matrix:
+
+|                | Predicted Genuine | Predicted Fraud |
+| -------------- | ----------------- | --------------- |
+| Actual Genuine | 3310              | 93              |
+| Actual Fraud   | 20                | 153             |
+
+### Status
+
+✅ Deployed in Streamlit
 
 ---
 
-## Project Structure
+## Version 2 — XGBoost Classifier
+
+### Model
+
+* XGBoost Classifier
+
+Parameters:
+
+* n_estimators = 100
+* max_depth = 6
+* learning_rate = 0.1
+* random_state = 42
+
+### Performance
+
+| Metric         | Value |
+| -------------- | ----- |
+| Accuracy       | 98%   |
+| Fraud Recall   | 63%   |
+| Fraud F1 Score | 77%   |
+
+Confusion Matrix:
+
+|                | Predicted Genuine | Predicted Fraud |
+| -------------- | ----------------- | --------------- |
+| Actual Genuine | 3403              | 0               |
+| Actual Fraud   | 64                | 109             |
+
+### Status
+
+✅ Trained and Saved
+
+---
+
+# Model Comparison
+
+| Metric         | Logistic Regression | XGBoost |
+| -------------- | ------------------- | ------- |
+| Accuracy       | 97%                 | 98%     |
+| Fraud Recall   | 88%                 | 63%     |
+| Fraud F1 Score | 73%                 | 77%     |
+
+## Final Deployment Decision
+
+Although XGBoost achieved slightly higher overall accuracy and F1-score, Logistic Regression achieved significantly higher fraud recall.
+
+Since the primary goal of this project is detecting fraudulent job advertisements, Logistic Regression was selected as the deployed model because missing fraudulent jobs is more costly than incorrectly flagging legitimate ones.
+
+---
+
+# Important Fraud Indicators Discovered
+
+Top fraud-associated keywords identified by the Logistic Regression model:
+
+* link
+* aptitude
+* entry
+* money
+* financing
+* earn
+* clerk
+* administrative
+* gas
+* optical
+* offshore
+* engineering
+* hospital
+* oil
+* cash
+* assistant
+* accountant
+
+These terms were identified through model coefficient analysis.
+
+---
+
+# Project Structure
 
 employment-fraud-detector/
 
 ├── app/
-│   └── app.py
-
-├── models/
-│   ├── logistic_fraud_detector.pkl
-│   └── tfidf_vectorizer.pkl
+│ └── app.py
 
 ├── data/
-│   └── fake_job_postings.csv
+│ └── fake_job_postings.csv
+
+├── models/
+│ ├── logistic_fraud_detector.pkl
+│ ├── xgboost_fraud_detector.pkl
+│ └── tfidf_vectorizer.pkl
+
+├── notebooks/
+│ └── eda.ipynb
 
 ├── requirements.txt
 
@@ -94,32 +240,39 @@ employment-fraud-detector/
 
 ---
 
-## Technologies Used
+# Technologies Used
 
-### Programming Language
+## Programming Language
 
 * Python
 
-### Machine Learning
+## Machine Learning
 
 * Scikit-learn
 * Logistic Regression
+* XGBoost
+
+## NLP
+
 * TF-IDF Vectorization
 
-### Deployment
+## Deployment
 
 * Streamlit
 * Streamlit Community Cloud
 
-### Libraries
+## Libraries
 
 * Pandas
 * NumPy
+* Scikit-learn
+* XGBoost
 * Joblib
+* Streamlit
 
 ---
 
-## Installation
+# Installation
 
 Clone the repository:
 
@@ -139,72 +292,11 @@ streamlit run app/app.py
 
 ---
 
-## Example Prediction
+# Future Enhancements
 
-### Fraudulent Posting
+## Version 3
 
-Input:
-
-"Earn ₹80,000 per month working only 2 hours a day. No experience required. Registration fee refundable after joining."
-
-Prediction:
-
-🚨 Fraudulent Job Posting
-
-Confidence: High
-
----
-
-## Future Enhancements
-
-This project follows an iterative machine learning development approach where each version improves upon the previous one.
-
-### Version 1 (Current Release)
-
-**Model:** Logistic Regression
-
-**Features:**
-
-* TF-IDF Vectorization
-* Combined text feature generation
-* Fraud prediction with confidence score
-* Streamlit web application deployment
-
-**Status:** Deployed and Operational
-
-### Version 2 (Completed)
-
-**Model:** XGBoost Classifier
-
-**Objectives Achieved:**
-
-* Trained and evaluated an XGBoost classifier
-* Compared performance against Logistic Regression
-* Evaluated Precision, Recall, F1-Score, and Accuracy
-* Saved trained XGBoost model for future deployment
-
-#### Performance Comparison
-
-| Metric         | Logistic Regression | XGBoost |
-| -------------- | ------------------- | ------- |
-| Accuracy       | 97%                 | 98%     |
-| Fraud Recall   | 88%                 | 63%     |
-| Fraud F1-Score | 73%                 | 77%     |
-
-#### Analysis
-
-Logistic Regression achieved significantly higher fraud recall, successfully identifying 88% of fraudulent postings.
-
-XGBoost achieved a higher F1-score and overall accuracy but missed a larger number of fraudulent postings.
-
-Since fraud detection prioritizes identifying fraudulent jobs rather than maximizing overall accuracy, Logistic Regression remains the primary deployed model while XGBoost is retained for experimentation and future ensemble approaches.
-
-**Status:** Completed and documented.
-
-
-### Version 3 (Planned)
-
-**Enhanced Feature Engineering**
+Feature Engineering
 
 Additional structured features:
 
@@ -213,27 +305,34 @@ Additional structured features:
 * telecommuting
 * employment_type
 * required_experience
+* required_education
 
-**Goal:**
-Improve detection performance by combining textual and structured information.
+Goal:
 
-### Version 4 (Planned)
+Combine structured and textual information to improve fraud detection.
 
-**Trust Score System**
+---
+
+## Version 4
+
+Trust Score Engine
 
 Additional verification signals:
 
 * Company website validation
-* Domain age analysis
 * Domain reputation checks
-* Email domain verification
+* Email verification
+* Company authenticity scoring
 
-**Goal:**
-Generate a trust score that complements machine learning predictions.
+Goal:
 
-### Version 5 (Planned)
+Generate a trust score alongside machine learning predictions.
 
-**Transformer-Based NLP Models**
+---
+
+## Version 5
+
+Transformer-Based NLP Models
 
 Models under consideration:
 
@@ -241,68 +340,34 @@ Models under consideration:
 * MiniLM
 * BERT
 
-**Objectives:**
+Objectives:
 
 * Context-aware language understanding
 * Improved semantic analysis
-* Better detection of sophisticated fraudulent postings
+* Better fraud detection performance
 
-### Long-Term Goals
+---
+
+# Long-Term Goals
 
 * Explainable AI (XAI)
-* Model comparison dashboard
 * REST API deployment
 * Multi-language support
+* Ensemble learning approaches
 * Real-time job portal integration
 * Automated company verification pipeline
 
 ---
 
-## Model Versioning Strategy
-
-To support reproducibility and model comparison, each trained model will be stored separately.
-
-Example:
-
-models/
-
-├── logistic_fraud_detector_v1.pkl
-
-├── xgboost_fraud_detector_v2.pkl
-
-├── bert_fraud_detector_v3.pkl
-
-└── tfidf_vectorizer.pkl
-
-This approach allows performance comparison across multiple machine learning models and supports continuous improvement of the Employment Fraud Detector.
-
----
-
-## Results
-
-| Model               | Accuracy | Fraud Recall | Fraud F1 Score | Status       |
-| ------------------- | -------- | ------------ | -------------- | ------------ |
-| Logistic Regression | 97%      | 88%          | 73%            | Deployed     |
-| XGBoost             | 98%      | 63%          | 77%            | Experimental |
-
-### Final Model Selection
-
-Although XGBoost achieved slightly higher overall accuracy, Logistic Regression was selected for deployment because it detected a greater percentage of fraudulent job postings.
-
-In employment fraud detection, minimizing missed fraud cases is more important than maximizing overall accuracy.
-
-
-
----
-
-## Author
+# Author
 
 Nikhil A S
 
-Machine Learning and Data Analytics Enthusiast
+MSc Data Science with Bio AI
 
 GitHub:
 https://github.com/nikhilasds25-bit
+
 
 ---
 
