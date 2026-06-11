@@ -172,16 +172,35 @@ This project follows an iterative machine learning development approach where ea
 
 **Status:** Deployed and Operational
 
-### Version 2 (Planned)
+### Version 2 (Completed)
 
 **Model:** XGBoost Classifier
 
-**Objectives:**
+**Objectives Achieved:**
 
-* Improve classification performance
-* Hyperparameter tuning
-* Compare results with Logistic Regression
-* Evaluate Precision, Recall, F1-Score, and ROC-AUC
+* Trained and evaluated an XGBoost classifier
+* Compared performance against Logistic Regression
+* Evaluated Precision, Recall, F1-Score, and Accuracy
+* Saved trained XGBoost model for future deployment
+
+#### Performance Comparison
+
+| Metric         | Logistic Regression | XGBoost |
+| -------------- | ------------------- | ------- |
+| Accuracy       | 97%                 | 98%     |
+| Fraud Recall   | 88%                 | 63%     |
+| Fraud F1-Score | 73%                 | 77%     |
+
+#### Analysis
+
+Logistic Regression achieved significantly higher fraud recall, successfully identifying 88% of fraudulent postings.
+
+XGBoost achieved a higher F1-score and overall accuracy but missed a larger number of fraudulent postings.
+
+Since fraud detection prioritizes identifying fraudulent jobs rather than maximizing overall accuracy, Logistic Regression remains the primary deployed model while XGBoost is retained for experimentation and future ensemble approaches.
+
+**Status:** Completed and documented.
+
 
 ### Version 3 (Planned)
 
@@ -261,13 +280,17 @@ This approach allows performance comparison across multiple machine learning mod
 
 ## Results
 
-Current deployed model:
+| Model               | Accuracy | Fraud Recall | Fraud F1 Score | Status       |
+| ------------------- | -------- | ------------ | -------------- | ------------ |
+| Logistic Regression | 97%      | 88%          | 73%            | Deployed     |
+| XGBoost             | 98%      | 63%          | 77%            | Experimental |
 
-| Model               | Feature Extraction | Deployment      |
-| ------------------- | ------------------ | --------------- |
-| Logistic Regression | TF-IDF             | Streamlit Cloud |
+### Final Model Selection
 
-The current release serves as the baseline model for future improvements and experimentation.
+Although XGBoost achieved slightly higher overall accuracy, Logistic Regression was selected for deployment because it detected a greater percentage of fraudulent job postings.
+
+In employment fraud detection, minimizing missed fraud cases is more important than maximizing overall accuracy.
+
 
 
 ---
