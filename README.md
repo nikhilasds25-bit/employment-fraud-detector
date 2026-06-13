@@ -17,7 +17,7 @@ The Employment Fraud Detector is a Machine Learning-based web application that a
 * ✅ Genuine Job Posting
 * 🚨 Fraudulent Job Posting
 
-The system uses Natural Language Processing (NLP), TF-IDF feature extraction, and machine learning models to classify job advertisements.
+The system uses Natural Language Processing (NLP), TF-IDF feature extraction, structured feature engineering, and machine learning models to classify job advertisements.
 
 ---
 
@@ -37,13 +37,13 @@ The system uses Natural Language Processing (NLP), TF-IDF feature extraction, an
 
 This project uses the Fake Job Postings Dataset containing both legitimate and fraudulent job advertisements.
 
-Dataset size:
+Dataset Size:
 
 * Total Records: 17,880
 * Genuine Jobs: 17,014
 * Fraudulent Jobs: 866
 
-The dataset contains:
+Dataset Attributes:
 
 * Job Title
 * Company Profile
@@ -55,41 +55,33 @@ The dataset contains:
 * Experience Level
 * Education Requirements
 
-Multiple textual columns were combined into a single text feature to improve fraud detection performance.
+Multiple textual columns were combined into a single feature to improve fraud detection performance.
 
 ---
 
 # Exploratory Data Analysis (EDA)
 
-Key findings from the dataset:
-
-### Fraud Distribution
+## Fraud Distribution
 
 * Genuine Jobs: 95.16%
 * Fraudulent Jobs: 4.84%
 
-### Company Logo Analysis
-
-Average company logo presence:
+## Company Logo Analysis
 
 * Genuine Jobs: 81.9%
 * Fraudulent Jobs: 32.7%
 
-### Screening Questions
-
-Average presence of screening questions:
+## Screening Questions
 
 * Genuine Jobs: 50.2%
 * Fraudulent Jobs: 28.8%
 
-### Remote Jobs
-
-Average telecommuting rate:
+## Remote Jobs
 
 * Genuine Jobs: 4.1%
 * Fraudulent Jobs: 7.4%
 
-These insights were later used to design future feature engineering improvements.
+These observations motivated the inclusion of structured features in later model versions.
 
 ---
 
@@ -100,13 +92,13 @@ These insights were later used to design future feature engineering improvements
 * Missing value handling
 * Text cleaning
 * Feature selection
-* Combined text feature generation
+* Combined text generation
 
 ## Feature Extraction
 
-TF-IDF (Term Frequency–Inverse Document Frequency)
+### TF-IDF Vectorization
 
-Used to transform job postings into numerical feature vectors suitable for machine learning models.
+TF-IDF (Term Frequency–Inverse Document Frequency) converts textual job postings into numerical vectors suitable for machine learning algorithms.
 
 ---
 
@@ -127,7 +119,7 @@ Used to transform job postings into numerical feature vectors suitable for machi
 | Fraud Recall   | 88%   |
 | Fraud F1 Score | 73%   |
 
-Confusion Matrix:
+### Confusion Matrix
 
 |                | Predicted Genuine | Predicted Fraud |
 | -------------- | ----------------- | --------------- |
@@ -161,7 +153,7 @@ Parameters:
 | Fraud Recall   | 63%   |
 | Fraud F1 Score | 77%   |
 
-Confusion Matrix:
+### Confusion Matrix
 
 |                | Predicted Genuine | Predicted Fraud |
 | -------------- | ----------------- | --------------- |
@@ -174,25 +166,79 @@ Confusion Matrix:
 
 ---
 
-# Model Comparison
+## Version 3.1 — XGBoost + Structured Features
 
-| Metric         | Logistic Regression | XGBoost |
-| -------------- | ------------------- | ------- |
-| Accuracy       | 97%                 | 98%     |
-| Fraud Recall   | 88%                 | 63%     |
-| Fraud F1 Score | 73%                 | 77%     |
+### Additional Features
 
-## Final Deployment Decision
+* has_company_logo
+* has_questions
+* telecommuting
 
-Although XGBoost achieved slightly higher overall accuracy and F1-score, Logistic Regression achieved significantly higher fraud recall.
+### Performance
 
-Since the primary goal of this project is detecting fraudulent job advertisements, Logistic Regression was selected as the deployed model because missing fraudulent jobs is more costly than incorrectly flagging legitimate ones.
+| Metric         | Value |
+| -------------- | ----- |
+| Accuracy       | 98%   |
+| Fraud Recall   | 69%   |
+| Fraud F1 Score | 81%   |
+
+### Confusion Matrix
+
+|                | Predicted Genuine | Predicted Fraud |
+| -------------- | ----------------- | --------------- |
+| Actual Genuine | 3401              | 2               |
+| Actual Fraud   | 53                | 120             |
+
+### Status
+
+✅ Trained and Saved
+
+---
+
+## Version 3.2 — Logistic Regression + Structured Features
+
+### Additional Features
+
+* has_company_logo
+* has_questions
+* telecommuting
+
+### Performance
+
+| Metric         | Value |
+| -------------- | ----- |
+| Accuracy       | 96%   |
+| Fraud Recall   | 90%   |
+| Fraud F1 Score | 68%   |
+
+### Status
+
+✅ Trained and Saved
+
+---
+
+# Extended Model Comparison
+
+| Version | Model                                     | Accuracy | Fraud Recall | Fraud F1 |
+| ------- | ----------------------------------------- | -------- | ------------ | -------- |
+| V1      | Logistic Regression                       | 97%      | 88%          | 73%      |
+| V2      | XGBoost                                   | 98%      | 63%          | 77%      |
+| V3.1    | XGBoost + Structured Features             | 98%      | 69%          | 81%      |
+| V3.2    | Logistic Regression + Structured Features | 96%      | 90%          | 68%      |
+
+---
+
+# Final Deployment Decision
+
+Although newer models achieved improvements in specific metrics, Version 1 Logistic Regression remains the deployed model because it provides a strong balance between fraud detection performance, stability, and simplicity.
+
+The project continues to explore alternative models and feature engineering approaches for future deployment candidates.
 
 ---
 
 # Important Fraud Indicators Discovered
 
-Top fraud-associated keywords identified by the Logistic Regression model:
+Top fraud-associated keywords identified by Logistic Regression:
 
 * link
 * aptitude
@@ -212,7 +258,7 @@ Top fraud-associated keywords identified by the Logistic Regression model:
 * assistant
 * accountant
 
-These terms were identified through model coefficient analysis.
+These terms were identified through coefficient analysis.
 
 ---
 
@@ -221,17 +267,27 @@ These terms were identified through model coefficient analysis.
 employment-fraud-detector/
 
 ├── app/
+
 │ └── app.py
 
 ├── data/
+
 │ └── fake_job_postings.csv
 
 ├── models/
+
 │ ├── logistic_fraud_detector.pkl
+
 │ ├── xgboost_fraud_detector.pkl
+
+│ ├── xgboost_structured_v3_1.pkl
+
+│ ├── logistic_structured_v3_2.pkl
+
 │ └── tfidf_vectorizer.pkl
 
 ├── notebooks/
+
 │ └── eda.ipynb
 
 ├── requirements.txt
@@ -272,50 +328,9 @@ employment-fraud-detector/
 
 ---
 
-# Installation
-
-Clone the repository:
-
-git clone https://github.com/nikhilasds25-bit/employment-fraud-detector.git
-
-Navigate to the project folder:
-
-cd employment-fraud-detector
-
-Install dependencies:
-
-pip install -r requirements.txt
-
-Run the application:
-
-streamlit run app/app.py
-
----
-
 # Future Enhancements
 
-## Version 3
-
-Feature Engineering
-
-Additional structured features:
-
-* has_company_logo
-* has_questions
-* telecommuting
-* employment_type
-* required_experience
-* required_education
-
-Goal:
-
-Combine structured and textual information to improve fraud detection.
-
----
-
-## Version 4
-
-Trust Score Engine
+## Version 4 — Trust Score Engine
 
 Additional verification signals:
 
@@ -330,9 +345,7 @@ Generate a trust score alongside machine learning predictions.
 
 ---
 
-## Version 5
-
-Transformer-Based NLP Models
+## Version 5 — Transformer-Based NLP Models
 
 Models under consideration:
 
@@ -366,11 +379,12 @@ Nikhil A S
 MSc Data Science with Bio AI
 
 GitHub:
-https://github.com/nikhilasds25-bit
 
+https://github.com/nikhilasds25-bit
 
 ---
 
 ## License
 
 This project is intended for educational and research purposes.
+
